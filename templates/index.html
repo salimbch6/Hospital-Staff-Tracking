@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Healthcare Video Tracking</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .navbar {
+            background-color: #0077cc;
+            padding: 15px;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .alert {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            margin: 20px auto;
+            width: 80%;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            animation: fadeOut 4s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .upload-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .upload-section form {
+            display: inline-block;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .upload-section input[type="file"] {
+            margin-bottom: 15px;
+        }
+
+        .upload-section button {
+            background-color: #0077cc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .upload-section button:hover {
+            background-color: #005fa3;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 320px;
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .video-info {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            word-break: break-word;
+        }
+
+        #spinner {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #spinner img {
+            width: 60px;
+        }
+    </style>
+    <script>
+        function showSpinner() {
+            document.getElementById('spinner').style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+
+<div class="navbar">
+    Healthcare Tracking - Processed Videos
+</div>
+
+{% if message %}
+<div class="alert">
+    {{ message }}
+</div>
+{% endif %}
+
+<h1>Upload a New Video</h1>
+
+<div class="upload-section">
+    <form action="/" method="post" enctype="multipart/form-data" onsubmit="showSpinner()">
+        <input type="file" name="video" required><br>
+        <button type="submit">Upload and Process</button>
+    </form>
+
+    <div id="spinner">
+        <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
+        <p>Processing video, please wait...</p>
+    </div>
+</div>
+
+<h1>Processed Video Gallery</h1>
+
+<div class="gallery">
+    {% for video in videos %}
+    <div class="video-card">
+        <video controls>
+            <source src="{{ url_for('static', filename='videos/output/' + video) }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-info">
+            {{ video }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>
